@@ -36,17 +36,17 @@ export class LiveTableEditor {
     this.createTable();
   }
   createTable(){
-    let tbl = "<table>";
+let table = ""
     for (let i = 0; i < this.rows; i++){
-      let tr = "<tr>");
+      let tr = "<tr>"
       for (let i = 0; i < this.columns; i++){
-        let td = tr.appendChild(this.el.shadowRoot.appendChild('td'));
-        var textNode = this.el.shadowRoot.createTextNode(this.data);
-        td.appendChild(textNode);
+        tr+=`<td>row ${i}</td>`;
+
       }
-      tbl.appendChild(tr);
+      tr+= "</tr>"
+      table += tr
     }
-    document.getElementById("editor").appendChild(tbl);
+        this.el.shadowRoot.getElementById("editor").innerHTML = table
 
   }
 
@@ -58,13 +58,8 @@ export class LiveTableEditor {
 
   render() {
     return (
-      <div id="editor">
-        {this.createTable()}
-        {this.width}
-        {this.height}
-        {this.data}
-        {this.rows}
-        {this.columns}
+      <div >
+        <table id="editor"></table>
       </div>
     );
   }
