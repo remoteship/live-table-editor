@@ -1,5 +1,7 @@
-import { Component, Prop, h } from "@stencil/core";
+import { Component, Prop, h, Element } from "@stencil/core";
 import { format } from "../../utils/utils";
+
+
 @Component({
   tag: "live-table-editor",
   styleUrl: "live-table-editor.css",
@@ -37,11 +39,15 @@ export class LiveTableEditor {
   }
   createTable(){
 let table = ""
-    for (let i = 0; i < this.rows; i++){
+    for (let i = 0; i < this.rows+1; i++){
       let tr = "<tr>"
-      for (let i = 0; i < this.columns; i++){
-        tr+=`<td>row ${i}</td>`;
+      for (let j = 0; j < this.columns; j++){
+        if (i == 0 ){
+          tr+=`<th> ${j} ${i}</th>`;
+        } else {
+          tr+=`<td contenteditable="true"> ${j} ${i}</td>`;
 
+        }
       }
       tr+= "</tr>"
       table += tr
