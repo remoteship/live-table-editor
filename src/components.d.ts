@@ -11,17 +11,19 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface LiveTableEditor {
+    'columns': number;
     'data': string;
     /**
-    * enable editing
+    * boolean value for enable editing
     */
     'edit': boolean;
     /**
-    * height of the editor
+    * int value for the height of the editor
     */
     'height': number;
+    'rows': number;
     /**
-    * width of the editor
+    * int value for the width of the editor
     */
     'width': number;
   }
@@ -42,17 +44,19 @@ declare global {
 
 declare namespace LocalJSX {
   interface LiveTableEditor {
+    'columns'?: number;
     'data'?: string;
     /**
-    * enable editing
+    * boolean value for enable editing
     */
     'edit'?: boolean;
     /**
-    * height of the editor
+    * int value for the height of the editor
     */
     'height'?: number;
+    'rows'?: number;
     /**
-    * width of the editor
+    * int value for the width of the editor
     */
     'width'?: number;
   }
