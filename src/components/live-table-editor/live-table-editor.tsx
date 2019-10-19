@@ -1,6 +1,4 @@
 import { Component, Prop, h, Element } from "@stencil/core";
-import { format } from "../../utils/utils";
-
 
 @Component({
   tag: "live-table-editor",
@@ -35,24 +33,27 @@ export class LiveTableEditor {
 
   @Element() el: HTMLElement;
   componentDidLoad() {
-    this.createTable();
+    let jsonData = JSON.parse(this.data);
+    this.createTable(jsonData);
   }
-  createTable(){
-let table = ""
+  createTable(data:object){
+    let table = "";
+    let tableHeader = Object.keys(data);
+    let tableValues = Object.values(data);
     for (let i = 0; i < this.rows+1; i++){
       let tr = "<tr>"
       for (let j = 0; j < this.columns; j++){
         if (i == 0 ){
-          tr+=`<th> ${j} ${i}</th>`;
+          tr+=`<th> ${tableHeader[j]}</th>`;
         } else {
-          tr+=`<td contenteditable="true"> ${j} ${i}</td>`;
-
+          tr+=`<td contenteditable="true"> ${data[tableHeader[j]][j]}</td>`;
+          console.log(tableValues[j]);
         }
       }
-      tr+= "</tr>"
-      table += tr
+      tr+= "</tr>";
+      table += tr;
     }
-        this.el.shadowRoot.getElementById("editor").innerHTML = table
+        this.el.shadowRoot.getElementById("editor").innerHTML = table;
 
   }
 
