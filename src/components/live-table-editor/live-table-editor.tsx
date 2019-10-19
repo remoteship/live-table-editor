@@ -36,17 +36,21 @@ export class LiveTableEditor {
     let jsonData = JSON.parse(this.data);
     this.createTable(jsonData);
   }
+  
   createTable(data:object){
     let table = "";
     let tableHeader = Object.keys(data);
     let tableValues = Object.values(data);
-    for (let i = 0; i < this.rows+1; i++){
+    for (let i = 0; i <= this.rows; i++){
+      console.log("i",i)
       let tr = "<tr>"
       for (let j = 0; j < this.columns; j++){
+        console.log('j',j)
         if (i == 0 ){
           tr+=`<th> ${tableHeader[j]}</th>`;
+          console.log(tableHeader[j])
         } else {
-          tr+=`<td contenteditable="true"> ${data[tableHeader[j]][j]}</td>`;
+          tr+=`<td contenteditable="true"> ${tableValues[j][i-1]}</td>`;
           console.log(tableValues[j]);
         }
       }
@@ -56,7 +60,6 @@ export class LiveTableEditor {
         this.el.shadowRoot.getElementById("editor").innerHTML = table;
 
   }
-
 
 
   editTable(){
