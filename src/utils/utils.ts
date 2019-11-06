@@ -13,3 +13,9 @@ export function rotateValues(values: object, columns: number, rows: number): Arr
    }
    return after
  }
+
+ export async function fetchFromUrl(url: string){
+  const res = await fetch(url)
+  const data = await res.json()
+  return data
+ }
