@@ -1,4 +1,4 @@
-import { Component, Prop, h, Element } from "@stencil/core";
+import { Component, Prop, h, Element, State } from "@stencil/core";
 
 @Component({
   tag: "live-table-editor",
@@ -32,44 +32,44 @@ export class LiveTableEditor {
   @Prop() columns: number;
 
   @Element() el: HTMLElement;
+
+  @State() bodyObj: Array<any>;
+  @State() headerObj: Array<any>;
   componentDidLoad() {
-    let jsonData = JSON.parse(this.data);
-    this.createTable(jsonData);
+    const parsedData = JSON.parse(this.data);
+    this.headerObj = Object.keys(parsedData)
+    this.bodyObj = this.rotateValues(parsedData)
   }
-  
-  createTable(data:object){
-    let table = "";
-    let tableHeader = Object.keys(data);
-    let tableValues = Object.values(data);
-    for (let i = 0; i <= this.rows; i++){
-      console.log("i",i)
-      let tr = "<tr>"
-      for (let j = 0; j < this.columns; j++){
-        console.log('j',j)
-        if (i == 0 ){
-          tr+=`<th> ${tableHeader[j]}</th>`;
-          console.log(tableHeader[j])
-        } else {
-          tr+=`<td contenteditable="true"> ${tableValues[j][i-1]}</td>`;
-          console.log(tableValues[j]);
+
+  rotateValues(values){
+   let pre =  Object.values(values)
+   let after = []
+    for(let c = 0; c < this.columns; c++) {
+      for(let r = 0; r < this.rows; r++) {
+        if (after[r]) {
+          after[r].push(pre[c][r])
+        } else{
+          after[r] = []
+          after[r].push(pre[c][r])
         }
       }
-      tr+= "</tr>";
-      table += tr;
     }
-        this.el.shadowRoot.getElementById("editor").innerHTML = table;
-
-  }
-
-
-  editTable(){
-
+    return after
   }
 
   render() {
     return (
       <div >
-        <table id="editor"></table>
+        <table id="editor">
+        <thead>
+          <tr>
+            {this.headerObj.map((x) => <th>{x}</th>)}
+          </tr>
+          </thead>
+          <tbody>
+              {this.bodyObj.map((x) => <tr> {x.map((y) => <td  contentEditable>{y}</td>)}</tr>)}
+          </tbody>
+        </table>
       </div>
     );
   }
