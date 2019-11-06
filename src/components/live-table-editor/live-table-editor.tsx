@@ -1,5 +1,5 @@
 import { Component, Prop, h, Element, State } from "@stencil/core";
-
+import { rotateValues } from "./../../utils/utils";
 @Component({
   tag: "live-table-editor",
   styleUrl: "live-table-editor.css",
@@ -20,15 +20,15 @@ export class LiveTableEditor {
   @Prop() edit: boolean;
   /*
    * string value for the  JSON data
-  */
+   */
   @Prop() data: string;
   /*
-  * int value for ammount of rows
-  */
+   * int value for ammount of rows
+   */
   @Prop() rows: number;
   /*
-  * int value for ammount of columns
-  */
+   * int value for ammount of columns
+   */
   @Prop() columns: number;
 
   @Element() el: HTMLElement;
@@ -37,37 +37,30 @@ export class LiveTableEditor {
   @State() headerObj: Array<any>;
   componentDidLoad() {
     const parsedData = JSON.parse(this.data);
-    this.headerObj = Object.keys(parsedData)
-    this.bodyObj = this.rotateValues(parsedData)
-  }
-
-  rotateValues(values){
-   let pre =  Object.values(values)
-   let after = []
-    for(let c = 0; c < this.columns; c++) {
-      for(let r = 0; r < this.rows; r++) {
-        if (after[r]) {
-          after[r].push(pre[c][r])
-        } else{
-          after[r] = []
-          after[r].push(pre[c][r])
-        }
-      }
-    }
-    return after
+    this.headerObj = Object.keys(parsedData);
+    this.bodyObj = rotateValues(parsedData, this.columns, this.rows);
   }
 
   render() {
     return (
-      <div >
+      <div>
         <table id="editor">
-        <thead>
-          <tr>
-            {this.headerObj.map((x) => <th>{x}</th>)}
-          </tr>
+          <thead>
+            <tr>
+              {this.headerObj.map(x => (
+                <th>{x}</th>
+              ))}
+            </tr>
           </thead>
           <tbody>
-              {this.bodyObj.map((x) => <tr> {x.map((y) => <td  contentEditable>{y}</td>)}</tr>)}
+            {this.bodyObj.map(x => (
+              <tr>
+                {" "}
+                {x.map(y => (
+                  <td contentEditable>{y}</td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

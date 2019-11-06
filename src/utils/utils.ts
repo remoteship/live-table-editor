@@ -1,8 +1,15 @@
-
-export function format(first: string, middle: string, last: string): string {
-  return (
-    (first || '') +
-    (middle ? ` ${middle}` : '') +
-    (last ? ` ${last}` : '')
-  );
-}
+export function rotateValues(values: object, columns: number, rows: number): Array<any>{
+  const pre =  Object.values(values)
+  const after = []
+   for(let c = 0; c < columns; c++) {
+     for(let r = 0; r < rows; r++) {
+       if (after[r]) {
+         after[r].push(pre[c][r])
+       } else{
+         after[r] = []
+         after[r].push(pre[c][r])
+       }
+     }
+   }
+   return after
+ }
