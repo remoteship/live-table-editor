@@ -33,17 +33,36 @@ export class LiveTableEditor {
 
   @Element() el: HTMLElement;
 
-  @State() bodyObj: Array<any>;
   @State() headerObj: Array<any>;
+  @State() bodyObj: Array<any>;
+  @State() filterData: Array<any>;
+
   componentDidLoad() {
     const parsedData = JSON.parse(this.data);
     this.headerObj = Object.keys(parsedData);
     this.bodyObj = rotateValues(parsedData, this.columns, this.rows);
+    this.filterData = this.bodyObj;
   }
+
+  filter = e => {
+    const filterWord = e.target.value.toLowerCase();
+    this.filterData = !filterWord
+    ? this.bodyObj
+    : this.bodyObj.filter(tr => {
+      return tr.some(td => td.toLowerCase().includes(filterWord));
+    });
+  };
 
   render() {
     return (
       <div>
+        <div>
+          <input
+            onInput={e => this.filter(e)}
+            type="text"
+            placeholder="Search"
+          ></input>
+        </div>
         <table id="editor">
           <thead>
             <tr>
@@ -53,9 +72,8 @@ export class LiveTableEditor {
             </tr>
           </thead>
           <tbody>
-            {this.bodyObj.map(x => (
+            {this.filterData.map(x => (
               <tr>
-                {" "}
                 {x.map(y => (
                   <td contentEditable>{y}</td>
                 ))}
