@@ -1,5 +1,5 @@
 import { Component, Prop, h, Element, State } from "@stencil/core";
-import { rotateValues } from "./../../utils/utils";
+import { rotateValues, filterRows } from "../../utils";
 @Component({
   tag: "live-table-editor",
   styleUrl: "live-table-editor.css",
@@ -31,19 +31,39 @@ export class LiveTableEditor {
    */
   @Prop() columns: number;
 
+  @Prop() searchable: boolean;
+
   @Element() el: HTMLElement;
 
-  @State() bodyObj: Array<any>;
   @State() headerObj: Array<any>;
+  @State() bodyObj: Array<any>;
+  @State() filteredRows: Array<any>;
+
   componentDidLoad() {
     const parsedData = JSON.parse(this.data);
     this.headerObj = Object.keys(parsedData);
     this.bodyObj = rotateValues(parsedData, this.columns, this.rows);
+    this.filteredRows = this.bodyObj;
   }
+
+  handleFilter = e => {
+    this.filteredRows = filterRows(this.bodyObj, e.target.value);
+  };
 
   render() {
     return (
       <div>
+        <div>
+          {this.searchable ? (
+            <input
+              onInput={e => this.handleFilter(e)}
+              type="text"
+              placeholder="Search"
+            ></input>
+          ) : (
+            ""
+          )}
+        </div>
         <table id="editor">
           <thead>
             <tr>
@@ -53,14 +73,15 @@ export class LiveTableEditor {
             </tr>
           </thead>
           <tbody>
-            {this.bodyObj.map(x => (
-              <tr>
-                {" "}
-                {x.map(y => (
-                  <td contentEditable>{y}</td>
-                ))}
-              </tr>
-            ))}
+            {this.filteredRows.length > 0
+              ? this.filteredRows.map(x => (
+                  <tr>
+                    {x.map(y => (
+                      <td contentEditable>{y}</td>
+                    ))}
+                  </tr>
+                ))
+              : "No records to display"}
           </tbody>
         </table>
       </div>

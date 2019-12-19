@@ -1,4 +1,4 @@
-export function rotateValues(values: object, columns: number, rows: number): Array<any>{
+export default function rotateValues(values: object, columns: number, rows: number): Array<any>{
   const pre =  Object.values(values)
   const after = []
    for(let c = 0; c < columns; c++) {
