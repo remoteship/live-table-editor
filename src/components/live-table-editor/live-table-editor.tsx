@@ -31,6 +31,8 @@ export class LiveTableEditor {
    */
   @Prop() columns: number;
 
+  @Prop() searchable: boolean;
+
   @Element() el: HTMLElement;
 
   @State() headerObj: Array<any>;
@@ -47,21 +49,25 @@ export class LiveTableEditor {
   filter = e => {
     const filterWord = e.target.value.toLowerCase();
     this.filterData = !filterWord
-    ? this.bodyObj
-    : this.bodyObj.filter(tr => {
-      return tr.some(td => td.toLowerCase().includes(filterWord));
-    });
+      ? this.bodyObj
+      : this.bodyObj.filter(tr => {
+          return tr.some(td => td.toLowerCase().includes(filterWord));
+        });
   };
 
   render() {
     return (
       <div>
         <div>
-          <input
-            onInput={e => this.filter(e)}
-            type="text"
-            placeholder="Search"
-          ></input>
+          {this.searchable ? (
+            <input
+              onInput={e => this.filter(e)}
+              type="text"
+              placeholder="Search"
+            ></input>
+          ) : (
+            ""
+          )}
         </div>
         <table id="editor">
           <thead>

@@ -22,6 +22,7 @@ export namespace Components {
     */
     'height': number;
     'rows': number;
+    'searchable': boolean;
     /**
     * int value for the width of the editor
     */
@@ -55,6 +56,7 @@ declare namespace LocalJSX {
     */
     'height'?: number;
     'rows'?: number;
+    'searchable'?: boolean;
     /**
     * int value for the width of the editor
     */
