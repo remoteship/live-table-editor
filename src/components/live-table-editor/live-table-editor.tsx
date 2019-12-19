@@ -1,5 +1,5 @@
 import { Component, Prop, h, Element, State } from "@stencil/core";
-import { rotateValues } from "./../../utils/utils";
+import { rotateValues, filterRows } from "../../utils";
 @Component({
   tag: "live-table-editor",
   styleUrl: "live-table-editor.css",
@@ -37,22 +37,17 @@ export class LiveTableEditor {
 
   @State() headerObj: Array<any>;
   @State() bodyObj: Array<any>;
-  @State() filterData: Array<any>;
+  @State() filteredRows: Array<any>;
 
   componentDidLoad() {
     const parsedData = JSON.parse(this.data);
     this.headerObj = Object.keys(parsedData);
     this.bodyObj = rotateValues(parsedData, this.columns, this.rows);
-    this.filterData = this.bodyObj;
+    this.filteredRows = this.bodyObj;
   }
 
-  filter = e => {
-    const filterWord = e.target.value.toLowerCase();
-    this.filterData = !filterWord
-      ? this.bodyObj
-      : this.bodyObj.filter(tr => {
-          return tr.some(td => td.toLowerCase().includes(filterWord));
-        });
+  handleFilter = e => {
+    this.filteredRows = filterRows(this.bodyObj, e.target.value);
   };
 
   render() {
@@ -61,7 +56,7 @@ export class LiveTableEditor {
         <div>
           {this.searchable ? (
             <input
-              onInput={e => this.filter(e)}
+              onInput={e => this.handleFilter(e)}
               type="text"
               placeholder="Search"
             ></input>
@@ -78,13 +73,15 @@ export class LiveTableEditor {
             </tr>
           </thead>
           <tbody>
-            {this.filterData.map(x => (
-              <tr>
-                {x.map(y => (
-                  <td contentEditable>{y}</td>
-                ))}
-              </tr>
-            ))}
+            {this.filteredRows.length > 0
+              ? this.filteredRows.map(x => (
+                  <tr>
+                    {x.map(y => (
+                      <td contentEditable>{y}</td>
+                    ))}
+                  </tr>
+                ))
+              : "No records to display"}
           </tbody>
         </table>
       </div>
