@@ -17,7 +17,7 @@ export class LiveTableEditor {
   /**
    * boolean value for enable editing
    */
-  @Prop() edit: boolean;
+  @Prop() editable: boolean;
   /*
    * string value for the  JSON data
    */
@@ -77,7 +77,9 @@ export class LiveTableEditor {
               ? this.filteredRows.map(x => (
                   <tr>
                     {x.map(y => (
-                      <td contentEditable>{y}</td>
+                      this.editable
+                      ? <td contentEditable>{y}</td>
+                      : <td>{y}</td>
                     ))}
                   </tr>
                 ))
